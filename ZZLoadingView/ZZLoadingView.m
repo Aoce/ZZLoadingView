@@ -27,26 +27,29 @@
         
         self.width = frame.size.width;
         self.height = frame.size.height;
-        
-        [self drawLefteyeLayer];
-        [self drawRighteyeLayer];
-        [self drawCircleLayer];
-        [self startAnimation];
     }
     return self;
 }
 
+- (void)drawLayers {
+    [self drawLefteyeLayer];
+    [self drawRighteyeLayer];
+    [self drawCircleLayer];
+    [self startAnimation];
+}
+
 - (void)drawCircleLayer {
     CGPoint center = CGPointMake(self.width/2, self.height/2);
-    CGFloat radius = self.width/2 - 2;
-    CGFloat startAngle = (2 * M_PI)/9 - M_PI_2; //-40°
-    CGFloat endAngele  = 3 * M_PI_2 - (2 * M_PI)/9;
+    CGFloat radius = self.width/2 - self.faceLineWidth/2;
+    CGFloat startAngle = self.gapRadian/2 - M_PI_2; //-40°
+    CGFloat endAngele  = 3 * M_PI_2 - self.gapRadian/2;
     CAShapeLayer *circleLayer = [CAShapeLayer layer];
     circleLayer.frame = self.bounds;
     circleLayer.anchorPoint = CGPointMake(0.5, 0.5);
     UIBezierPath *path = [UIBezierPath bezierPathWithArcCenter:center radius:radius startAngle:startAngle endAngle:endAngele clockwise:YES];
-    circleLayer.lineWidth = 4.0f;
+    circleLayer.lineWidth = self.faceLineWidth;
     circleLayer.path = path.CGPath;
+    circleLayer.lineCap = kCALineCapRound;
     circleLayer.strokeColor = [UIColor brownColor].CGColor;
     circleLayer.fillColor = [UIColor clearColor].CGColor;
     
@@ -56,22 +59,22 @@
 }
 
 - (void)drawLefteyeLayer {
-    CGFloat radius = 31/4;
-    CGPoint center = CGPointMake(self.width/2 - radius, self.height/2-2);
+    CGFloat radius = self.eyeRadius;
+    CGPoint center = CGPointMake(self.width/2 - radius, self.height/2-self.eyeFaceDistance);
     CAShapeLayer *lefteyeLayer = [CAShapeLayer layer];
     lefteyeLayer.frame = self.bounds;
     lefteyeLayer.position = center;
     lefteyeLayer.anchorPoint = CGPointMake(center.x/self.width, center.y/self.height);
     CAShapeLayer *lefteyeCircleLayer = [CAShapeLayer layer];
     UIBezierPath *eyeCirclePath = [UIBezierPath bezierPathWithArcCenter:center radius:radius startAngle:0 endAngle:2 * M_PI clockwise:YES];
-    lefteyeCircleLayer.lineWidth = 3.0f/2;
+    lefteyeCircleLayer.lineWidth = self.eyeCircleLineWidth;
     lefteyeCircleLayer.path = eyeCirclePath.CGPath;
     lefteyeCircleLayer.strokeColor = [UIColor brownColor].CGColor;
     lefteyeCircleLayer.fillColor = [UIColor clearColor].CGColor;
     
     CAShapeLayer *lefteyeBallLayer = [CAShapeLayer layer];
-    center = CGPointMake(center.x, center.y - radius + 2);
-    radius = 2;
+    center = CGPointMake(center.x, center.y - radius + self.eyeBallDistance);
+    radius = self.eyeBallRadius;
     UIBezierPath *eyeBallPath = [UIBezierPath bezierPathWithArcCenter:center radius:radius startAngle:0 endAngle:2 * M_PI clockwise:YES];
     lefteyeBallLayer.path = eyeBallPath.CGPath;
     lefteyeBallLayer.fillColor = [UIColor brownColor].CGColor;
@@ -84,22 +87,22 @@
 }
 
 - (void)drawRighteyeLayer {
-    CGFloat radius = 31/4;
-    CGPoint center = CGPointMake(self.width/2 + radius, self.height/2-2);
+    CGFloat radius = self.eyeRadius;
+    CGPoint center = CGPointMake(self.width/2 + radius, self.height/2-self.eyeFaceDistance);
     CAShapeLayer *righteyeLayer = [CAShapeLayer layer];
     righteyeLayer.frame = self.bounds;
     righteyeLayer.position = center;
     righteyeLayer.anchorPoint = CGPointMake(center.x/self.width, center.y/self.height);
     CAShapeLayer *righteyeCircleLayer = [CAShapeLayer layer];
     UIBezierPath *eyeCirclePath = [UIBezierPath bezierPathWithArcCenter:center radius:radius startAngle:0 endAngle:2 * M_PI clockwise:YES];
-    righteyeCircleLayer.lineWidth = 3.0f/2;
+    righteyeCircleLayer.lineWidth = self.eyeCircleLineWidth;
     righteyeCircleLayer.path = eyeCirclePath.CGPath;
     righteyeCircleLayer.strokeColor = [UIColor brownColor].CGColor;
     righteyeCircleLayer.fillColor = [UIColor clearColor].CGColor;
     
     CAShapeLayer *righteyeBallLayer = [CAShapeLayer layer];
-    center = CGPointMake(center.x, center.y - radius + 2);
-    radius = 2;
+    center = CGPointMake(center.x, center.y - radius + self.eyeBallDistance);
+    radius = self.eyeBallRadius;
     UIBezierPath *eyeBallPath = [UIBezierPath bezierPathWithArcCenter:center radius:radius startAngle:0 endAngle:2 * M_PI clockwise:YES];
     righteyeBallLayer.path = eyeBallPath.CGPath;
     righteyeBallLayer.fillColor = [UIColor brownColor].CGColor;
@@ -119,12 +122,12 @@
     }
     CABasicAnimation *rotationAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
     rotationAnimation.toValue = @(M_PI * 2.0);
-    rotationAnimation.duration = 1;
+    rotationAnimation.duration = self.duration;
     rotationAnimation.cumulative = YES;
     rotationAnimation.repeatCount = HUGE_VALF;
     rotationAnimation.removedOnCompletion = NO;
     rotationAnimation.fillMode = kCAFillModeForwards;
-    rotationAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    rotationAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
     [self.circleLayer addAnimation:rotationAnimation forKey:@"rotationZAnimation"];
     [self.lefteyeLayer addAnimation:rotationAnimation forKey:@"rotationZAnimation"];
     [self.righteyeLayer addAnimation:rotationAnimation forKey:@"rotationZAnimation"];
