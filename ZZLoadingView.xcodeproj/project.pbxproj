@@ -212,6 +212,7 @@
 				TargetAttributes = {
 					50B7758A1E093B9500D0995C = {
 						CreatedOnToolsVersion = 8.2;
+						DevelopmentTeam = V896B95CGK;
 						ProvisioningStyle = Automatic;
 					};
 					50B775A31E093B9500D0995C = {
@@ -430,6 +431,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = V896B95CGK;
 				INFOPLIST_FILE = ZZLoadingView/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.longbeach.www.ZZLoadingView;
@@ -441,6 +443,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = V896B95CGK;
 				INFOPLIST_FILE = ZZLoadingView/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.longbeach.www.ZZLoadingView;
@@ -513,6 +516,7 @@
 				50B775BA1E093B9500D0995C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		50B775BB1E093B9500D0995C /* Build configuration list for PBXNativeTarget "ZZLoadingViewTests" */ = {
 			isa = XCConfigurationList;
@@ -521,6 +525,7 @@
 				50B775BD1E093B9500D0995C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		50B775BE1E093B9500D0995C /* Build configuration list for PBXNativeTarget "ZZLoadingViewUITests" */ = {
 			isa = XCConfigurationList;
@@ -529,6 +534,7 @@
 				50B775C01E093B9500D0995C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

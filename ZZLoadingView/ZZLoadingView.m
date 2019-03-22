@@ -21,6 +21,8 @@
 
 @implementation ZZLoadingView
 
+#pragma mark - Initlize
+
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
@@ -31,12 +33,7 @@
     return self;
 }
 
-- (void)drawLayers {
-    [self drawLefteyeLayer];
-    [self drawRighteyeLayer];
-    [self drawCircleLayer];
-    [self startAnimation];
-}
+#pragma mark - Private
 
 - (void)drawCircleLayer {
     CGPoint center = CGPointMake(self.width/2, self.height/2);
@@ -50,7 +47,7 @@
     circleLayer.lineWidth = self.faceLineWidth;
     circleLayer.path = path.CGPath;
     circleLayer.lineCap = kCALineCapRound;
-    circleLayer.strokeColor = [UIColor brownColor].CGColor;
+    circleLayer.strokeColor = self.tintColor.CGColor;
     circleLayer.fillColor = [UIColor clearColor].CGColor;
     
     self.circleLayer = circleLayer;
@@ -69,7 +66,7 @@
     UIBezierPath *eyeCirclePath = [UIBezierPath bezierPathWithArcCenter:center radius:radius startAngle:0 endAngle:2 * M_PI clockwise:YES];
     lefteyeCircleLayer.lineWidth = self.eyeCircleLineWidth;
     lefteyeCircleLayer.path = eyeCirclePath.CGPath;
-    lefteyeCircleLayer.strokeColor = [UIColor brownColor].CGColor;
+    lefteyeCircleLayer.strokeColor = self.tintColor.CGColor;
     lefteyeCircleLayer.fillColor = [UIColor clearColor].CGColor;
     
     CAShapeLayer *lefteyeBallLayer = [CAShapeLayer layer];
@@ -77,7 +74,7 @@
     radius = self.eyeBallRadius;
     UIBezierPath *eyeBallPath = [UIBezierPath bezierPathWithArcCenter:center radius:radius startAngle:0 endAngle:2 * M_PI clockwise:YES];
     lefteyeBallLayer.path = eyeBallPath.CGPath;
-    lefteyeBallLayer.fillColor = [UIColor brownColor].CGColor;
+    lefteyeBallLayer.fillColor = self.tintColor.CGColor;
     
     [lefteyeCircleLayer addSublayer:lefteyeBallLayer];
     [lefteyeLayer addSublayer:lefteyeCircleLayer];
@@ -97,7 +94,7 @@
     UIBezierPath *eyeCirclePath = [UIBezierPath bezierPathWithArcCenter:center radius:radius startAngle:0 endAngle:2 * M_PI clockwise:YES];
     righteyeCircleLayer.lineWidth = self.eyeCircleLineWidth;
     righteyeCircleLayer.path = eyeCirclePath.CGPath;
-    righteyeCircleLayer.strokeColor = [UIColor brownColor].CGColor;
+    righteyeCircleLayer.strokeColor = self.tintColor.CGColor;
     righteyeCircleLayer.fillColor = [UIColor clearColor].CGColor;
     
     CAShapeLayer *righteyeBallLayer = [CAShapeLayer layer];
@@ -105,7 +102,7 @@
     radius = self.eyeBallRadius;
     UIBezierPath *eyeBallPath = [UIBezierPath bezierPathWithArcCenter:center radius:radius startAngle:0 endAngle:2 * M_PI clockwise:YES];
     righteyeBallLayer.path = eyeBallPath.CGPath;
-    righteyeBallLayer.fillColor = [UIColor brownColor].CGColor;
+    righteyeBallLayer.fillColor = self.tintColor.CGColor;
     
     [righteyeCircleLayer addSublayer:righteyeBallLayer];
     [righteyeLayer addSublayer:righteyeCircleLayer];
@@ -131,6 +128,55 @@
     [self.circleLayer addAnimation:rotationAnimation forKey:@"rotationZAnimation"];
     [self.lefteyeLayer addAnimation:rotationAnimation forKey:@"rotationZAnimation"];
     [self.righteyeLayer addAnimation:rotationAnimation forKey:@"rotationZAnimation"];
+}
+
+- (void)show {
+    [self drawLefteyeLayer];
+    [self drawRighteyeLayer];
+    [self drawCircleLayer];
+    [self startAnimation];
+}
+
+#pragma mark - Public
+
+- (void)showInView:(UIView *)view {
+    [view addSubview:self];
+    
+    [self show];
+}
+
+- (void)pause {
+    CFTimeInterval pausedTime = [self.circleLayer convertTime:CACurrentMediaTime() fromLayer:nil];
+    self.circleLayer.speed = 0.0f;
+    self.circleLayer.timeOffset = pausedTime;
+    
+    self.lefteyeLayer.speed = 0.0f;
+    self.lefteyeLayer.timeOffset = pausedTime;
+    
+    self.righteyeLayer.speed = 0.0f;
+    self.righteyeLayer.timeOffset = pausedTime;
+    
+}
+
+- (void)resume {
+    CFTimeInterval  pausedTime = [self.circleLayer timeOffset];
+    CFTimeInterval timeSincePause = [self.circleLayer convertTime:CACurrentMediaTime() fromLayer:nil] - pausedTime;
+    self.circleLayer.speed = 1.0;
+    self.circleLayer.beginTime = timeSincePause;
+    
+    self.lefteyeLayer.speed = 1.0;
+    self.lefteyeLayer.beginTime = timeSincePause;
+    
+    self.righteyeLayer.speed = 1.0;
+    self.righteyeLayer.beginTime = timeSincePause;
+}
+
+- (void)stop {
+    [self.circleLayer removeAllAnimations];
+    [self.lefteyeLayer removeAllAnimations];
+    [self.righteyeLayer removeAllAnimations];
+    
+    [self removeFromSuperview];
 }
 
 @end

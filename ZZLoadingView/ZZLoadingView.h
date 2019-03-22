@@ -16,10 +16,13 @@
 /* 缺口弧度 */
 @property (nonatomic, assign) CGFloat gapRadian;
 
+/* 眼睛半径 */
 @property (nonatomic, assign) CGFloat eyeRadius;
 
+/* 眼球半径 */
 @property (nonatomic, assign) CGFloat eyeBallRadius;
 
+/* 脸部圆圈线宽 */
 @property (nonatomic, assign) CGFloat faceLineWidth;
 
 /* 眼睛线条的宽度 */
@@ -31,6 +34,12 @@
 /* 圆脸中心距离眼镜中心在垂直方向的y值 */
 @property (nonatomic, assign) CGFloat eyeFaceDistance;
 
-- (void)drawLayers;
+/* 默认颜色 */
+@property (nonatomic, strong) UIColor *tintColor;
+
+- (void)showInView:(UIView *)view;
+- (void)pause;
+- (void)resume;
+- (void)stop;
 
 @end

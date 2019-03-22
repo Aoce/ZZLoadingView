@@ -11,6 +11,8 @@
 
 @interface ViewController ()
 
+@property (nonatomic, weak) ZZLoadingView *loadinView;
+
 @end
 
 @implementation ViewController
@@ -19,7 +21,9 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
-    ZZLoadingView *loadingView = [[ZZLoadingView alloc] initWithFrame:CGRectMake(100, 150, 43, 43)];
+    self.view.backgroundColor = [UIColor lightGrayColor];
+    
+    ZZLoadingView *loadingView = [[ZZLoadingView alloc] initWithFrame:CGRectMake(160, 320, 43, 43)];
     loadingView.gapRadian = (4 * M_PI)/9; //缺口80°
     loadingView.duration = 1.0;
     loadingView.eyeRadius = 31/4;
@@ -28,14 +32,27 @@
     loadingView.eyeBallDistance = 2.0f;
     loadingView.eyeFaceDistance = 2.0f;
     loadingView.eyeCircleLineWidth = 3.0/2;
-    [loadingView drawLayers];
-    [self.view addSubview:loadingView];
+    loadingView.tintColor = [UIColor whiteColor];
+    [loadingView showInView:self.view];
+    
+    self.loadinView = loadingView;
 }
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (IBAction)pause:(id)sender {
+    [self.loadinView pause];
+}
+
+- (IBAction)stop:(id)sender {
+    [self.loadinView stop];
+}
+
+- (IBAction)resume:(id)sender {
+    [self.loadinView resume];
 }
 
 
